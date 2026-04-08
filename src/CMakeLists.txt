@@ -27,6 +27,9 @@ set(SOURCES
 	FloatTetwild.h
 	FloatTetwild.cpp
 
+	Run.h
+	Run.cpp
+
 	FloatTetDelaunay.h
 	FloatTetDelaunay.cpp
 		TriangleInsertion.cpp
