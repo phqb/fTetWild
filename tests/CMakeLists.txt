@@ -15,6 +15,7 @@ set(test_sources
 	tests.cpp
 	test_predicates.cpp
 	test_table.cpp
+	test_run.cpp
 	# test_subdivision.cpp
 	# test_tree.cpp
     # test_envelope.cpp
