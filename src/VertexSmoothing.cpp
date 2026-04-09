@@ -10,6 +10,7 @@
 #include <floattetwild/VertexSmoothing.h>
 
 #include <floattetwild/MeshImprovement.h>
+#include <floattetwild/Logger.hpp>
 #ifdef FLOAT_TETWILD_USE_TBB
 #include <oneapi/tbb/parallel_for.h>
 #endif
@@ -162,7 +163,7 @@ void floatTetWild::vertex_smoothing(Mesh& mesh, const AABBWrapper& tree)
         smooth_one(v_id);
 #endif
 
-    cout << "success = " << suc_counter << "(" << counter << ")" << endl;
+    logger().info("success = {}({})", suc_counter, counter);
 }
 
 bool floatTetWild::project_and_check(Mesh&                mesh,

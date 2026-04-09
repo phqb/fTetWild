@@ -44,11 +44,11 @@ void floatTetWild::simplify(std::vector<Vector3>&  input_vertices,
     igl::Timer timer;
     timer.start();
     collapsing(input_vertices, input_faces, tree, params, v_is_removed, f_is_removed, conn_fs);
-    std::cout << "collapsing " << timer.getElapsedTime() << std::endl;
+    logger().info("collapsing {}", timer.getElapsedTime());
 
     timer.start();
     swapping(input_vertices, input_faces, tree, params, v_is_removed, f_is_removed, conn_fs);
-    std::cout << "swapping " << timer.getElapsedTime() << std::endl;
+    logger().info("swapping {}", timer.getElapsedTime());
 
     // clean up vs, fs
     // v
@@ -788,13 +788,13 @@ void floatTetWild::flattening(std::vector<Vector3>&  input_vertices,
 
     auto needs_flattening = [](const Vector3& n1, const Vector3& n2) {
         if (n1.dot(n2) > 0.98) {
-            cout << std::setprecision(17) << n1.dot(n2) << endl;
-            cout << n1.norm() << " " << n2.norm() << endl;
+            logger().info("{:.17g}", n1.dot(n2));
+            logger().info("{} {}", n1.norm(), n2.norm());
         }
         return true;
 
         double d = std::abs(n1.dot(n2) - 1);
-        cout << n1.dot(n2) << endl;
+        logger().info("{}", n1.dot(n2));
         if (d > 1e-15 && d < 1e-5)
             return true;
         return false;
@@ -913,7 +913,7 @@ void floatTetWild::flattening(std::vector<Vector3>&  input_vertices,
         //        }
     }
 
-    cout << "flattening " << ts << " faces" << endl;
+    logger().info("flattening {} faces", ts);
 }
 
 floatTetWild::Scalar floatTetWild::get_angle_cos(const Vector3& p,
@@ -981,7 +981,7 @@ void floatTetWild::check_surface(std::vector<Vector3>&    input_vertices,
                                  const AABBWrapper&       tree,
                                  const Parameters&        params)
 {
-    cout << "checking surface" << endl;
+    logger().info("checking surface");
     bool is_valid = true;
     for (int i = 0; i < input_faces.size(); i++) {
         if (f_is_removed[i])
@@ -994,14 +994,13 @@ void floatTetWild::check_surface(std::vector<Vector3>&    input_vertices,
                         params.dd_simplification);
         Scalar dist = tree.dist_sf_envelope(ps, params.eps_2);
         if (dist > 0) {
-            cout << "is_out_sf_envelope!!" << endl;
+            logger().info("is_out_sf_envelope!!");
             is_valid = false;
             //            cout<<input_vertices[input_faces[i][0]].transpose()<<endl;
             //            cout<<input_vertices[input_faces[i][1]].transpose()<<endl;
             //            cout<<input_vertices[input_faces[i][2]].transpose()<<endl;
-            cout << input_faces[i][0] << " " << input_faces[i][1] << " " << input_faces[i][2]
-                 << endl;
-            cout << dist << endl;
+            logger().info("{} {} {}", input_faces[i][0], input_faces[i][1], input_faces[i][2]);
+            logger().info("{}", dist);
             //            //pausee();
         }
     }

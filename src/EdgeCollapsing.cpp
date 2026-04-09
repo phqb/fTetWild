@@ -8,6 +8,7 @@
 
 #include <floattetwild/EdgeCollapsing.h>
 #include <floattetwild/LocalOperations.h>
+#include <floattetwild/Logger.hpp>
 
 #include <floattetwild/MeshImprovement.h>  //todo: tmp
 
@@ -153,8 +154,8 @@ void edge_collapsing_aux(Mesh&                            mesh,
             counter++;
         }
 
-        cout << "success(env) = " << suc_counter_env << endl;
-        cout << "success = " << suc_counter << "(" << counter << ")" << endl;
+        logger().info("success(env) = {}", suc_counter_env);
+        logger().info("success = {}({})", suc_counter, counter);
 
 #if EC_POSTPROCESS
         if (suc_counter == 0)

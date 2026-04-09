@@ -153,12 +153,12 @@ int main(int argc, char** argv)
     GEO::initialize();
     //    exactinit();
 
-    std::vector<int> indices(20);
-    std::iota(std::begin(indices), std::end(indices), 0);
-    floatTetWild::Random::shuffle(indices);
-    for (int a : indices)
-        std::cout << a << " ";
-    std::cout << std::endl;
+    // std::vector<int> indices(20);
+    // std::iota(std::begin(indices), std::end(indices), 0);
+    // floatTetWild::Random::shuffle(indices);
+    // for (int a : indices)
+    //     std::cout << a << " ";
+    // std::cout << std::endl;
 
     // Import standard command line arguments, and custom ones
     GEO::CmdLine::import_arg_group("standard");

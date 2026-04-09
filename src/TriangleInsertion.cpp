@@ -698,9 +698,8 @@ bool floatTetWild::insert_one_triangle(
     // fortest
     myassert(!cut_t_ids.empty(), "cut_t_ids.empty()!!!");
     if (cut_t_ids.empty()) {
-        cout << get_area(vs[0], vs[1], vs[2]) << endl;
-        cout << "f" << insert_f_id << ": " << input_faces[insert_f_id][0] << " "
-             << input_faces[insert_f_id][1] << " " << input_faces[insert_f_id][2] << endl;
+        logger().info("{}", get_area(vs[0], vs[1], vs[2]));
+        logger().info("f{}: {} {} {}", insert_f_id, input_faces[insert_f_id][0], input_faces[insert_f_id][1], input_faces[insert_f_id][2]);
         pausee();
         return false;
     }
@@ -744,7 +743,7 @@ bool floatTetWild::insert_one_triangle(
                   insert_f_id, input_vertices, input_faces, cut_t_ids, mesh))
                 return true;
         }
-        cout << "FAIL get_intersecting_edges_and_points" << endl;
+        logger().info("FAIL get_intersecting_edges_and_points");
         return false;
     }
     //    time_get_intersecting_edges_and_points += timer.getElapsedTime();
@@ -784,7 +783,7 @@ bool floatTetWild::insert_one_triangle(
                   insert_f_id, input_vertices, input_faces, cut_t_ids, mesh))
                 return true;
         }
-        cout << "FAIL subdivide_tets" << endl;
+        logger().info("FAIL subdivide_tets");
         return false;
     }
     //    time_subdivide_tets += timer.getElapsedTime();
@@ -1579,7 +1578,7 @@ bool floatTetWild::subdivide_tets(
                     //                    cout << "cnt_on = " << cnt_on << endl;//fortest
                     // fortest
                     if (cnt_on == 4) {
-                        cout << "cnt_on==4!!" << endl;
+                        logger().info("cnt_on==4!!");
                     }
                     // fortest
 
@@ -2077,8 +2076,8 @@ void floatTetWild::find_boundary_edges(
         }
     }
 
-    cout << "#boundary_e1 = " << cnt1 << endl;
-    cout << "#boundary_e2 = " << cnt2 << endl;
+    logger().info("#boundary_e1 = {}", cnt1);
+    logger().info("#boundary_e2 = {}", cnt2);
 }
 // double time_e1 = 0;
 // double time_e2 = 0;
@@ -2225,7 +2224,7 @@ bool floatTetWild::insert_boundary_edges(
         }
         time2 += timer.getElapsedTime();
         if (n_f_ids.empty()) {
-            cout << "FAIL n_f_ids.empty()" << endl;
+            logger().info("FAIL n_f_ids.empty()");
             continue;
         }
 
@@ -2251,7 +2250,7 @@ bool floatTetWild::insert_boundary_edges(
                 is_face_inserted[f_id] = false;
             is_all_inserted = false;
 
-            cout << "FAIL insert_boundary_edges_get_intersecting_edges_and_points" << endl;
+            logger().info("FAIL insert_boundary_edges_get_intersecting_edges_and_points");
             time3 += timer.getElapsedTime();
             continue;
         }
@@ -2331,13 +2330,13 @@ bool floatTetWild::insert_boundary_edges(
                 }
                 known_not_surface_fs.insert(
                   known_not_surface_fs.end(), cut_fs.begin(), cut_fs.end());
-                cout << "FAIL subdivide_tets" << endl;
+                logger().info("FAIL subdivide_tets");
             }
             else {
                 for (auto& f : cut_fs)
                     mark_known_surface_fs(f, KNOWN_SURFACE);
                 known_surface_fs.insert(known_surface_fs.end(), cut_fs.begin(), cut_fs.end());
-                cout << "SEMI-FAIL subdivide_tets" << endl;
+                logger().info("SEMI-FAIL subdivide_tets");
             }
 
             is_all_inserted = false;  // unless now
@@ -3109,8 +3108,8 @@ void floatTetWild::mark_surface_fs(const std::vector<Vector3>&                  
         }
     }
 
-    cout << "known_surface_fs.size = " << known_surface_fs.size() << endl;
-    cout << "known_not_surface_fs.size = " << known_not_surface_fs.size() << endl;
+    logger().info("known_surface_fs.size = {}", known_surface_fs.size());
+    logger().info("known_not_surface_fs.size = {}", known_not_surface_fs.size());
     if (known_surface_fs.empty() && known_not_surface_fs.empty())
         return;
 
@@ -3222,7 +3221,7 @@ bool floatTetWild::is_uninserted_face_covered(int                          unins
             return false;
     }
 
-    cout << "covered!!!!!!!" << endl;
+    logger().info("covered!!!!!!!");
     return true;
 }
 
@@ -3256,7 +3255,7 @@ int floatTetWild::get_opp_t_id(int t_id, int j, const Mesh& mesh)
 void floatTetWild::myassert(bool b, const std::string& s)
 {
     if (b == false) {
-        cout << "myassert fail: " << s << endl;
+        logger().info("myassert fail: {}", s);
         pausee();
     }
 }
@@ -3433,7 +3432,7 @@ void floatTetWild::check_track_surface_fs(
             }
         }
         if (covered_fs_infos[f_id].empty()) {
-            cout << "covered_fs_infos[f_id].empty()!!!" << endl;
+            logger().info("covered_fs_infos[f_id].empty()!!!");
             pausee();
             continue;
         }
@@ -3445,7 +3444,7 @@ void floatTetWild::check_track_surface_fs(
         double eps = mesh.params.eps_coplanar * mesh.params.eps_coplanar;
         //
         if (ps.size() < 4) {
-            cout << "ps.size() < 4!!" << endl;
+            logger().info("ps.size() < 4!!");
             ps.clear();
             sample_triangle(f_vs, ps, mesh.params.dd / 4);
         }
@@ -3472,9 +3471,9 @@ void floatTetWild::check_track_surface_fs(
                 }
             }
             if (!is_inside) {
-                cout << "check is_input_face_covered fail!!" << endl;
-                cout << "f_id = " << f_id << endl;
-                cout << "i = " << i << endl;
+                logger().info("check is_input_face_covered fail!!");
+                logger().info("f_id = {}", f_id);
+                logger().info("i = {}", i);
                 pausee();
                 break;
             }
@@ -3484,7 +3483,7 @@ void floatTetWild::check_track_surface_fs(
         if (is_inside /* && i < sorted_f_ids.size() * 0.98*/)
             //        if (f_id != 3083)
             continue;
-        cout << i << " f_id = " << f_id << endl;
+        logger().info("{} f_id = {}", i, f_id);
         // output input/tet triangles in different colors
         {
             auto&           infos = covered_fs_infos[f_id];
