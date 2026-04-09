@@ -30,6 +30,9 @@ set(SOURCES
 	Run.h
 	Run.cpp
 
+	RunC.h
+	RunC.cpp
+
 	FloatTetDelaunay.h
 	FloatTetDelaunay.cpp
 		TriangleInsertion.cpp
