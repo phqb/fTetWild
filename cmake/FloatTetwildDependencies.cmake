@@ -91,6 +91,8 @@ if(NOT TARGET geogram::geogram)
         set(GEO_PLATFORM "Win-vs-generic")
     elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
         set(GEO_PLATFORM "Darwin-clang")
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(GEO_PLATFORM "Linux64-clang")
     else()
         set(GEO_PLATFORM "Linux64-gcc")
     endif()
@@ -109,6 +111,16 @@ if(NOT TARGET geogram::geogram)
     set(GEOGRAM_WITH_TRIANGLE OFF CACHE BOOL "Disable triangle" FORCE)
 
     FetchContent_MakeAvailable(geogram)
+
+    # Geogram's Linux-gcc platform unconditionally adds -fopenmp to CMAKE_CXX_FLAGS,
+    # defining _OPENMP and causing third-party code (PoissonRecon, OpenNL) to include
+    # <omp.h> which may not be installed. Cancel it on the affected targets by appending
+    # -fno-openmp, which GCC processes after CMAKE_CXX_FLAGS in the compile command.
+    if((CMAKE_SYSTEM_NAME MATCHES "Linux") AND DISABLE_OPENMP)
+        target_compile_options(geogram PRIVATE -fno-openmp)
+        target_compile_options(geogram_third_party PRIVATE -fno-openmp)
+    endif()
+
     include(geogram)
 endif()
 

@@ -47,7 +47,7 @@ if(NOT TARGET geogram)
 endif()
 target_include_directories(geogram SYSTEM PUBLIC ${GEOGRAM_SOURCE_INCLUDE_DIR})
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if((${CMAKE_SYSTEM_NAME} MATCHES "Linux") AND (NOT DISABLE_OPENMP))
 	set_target_properties(geogram PROPERTIES COMPILE_FLAGS -fopenmp LINK_FLAGS -fopenmp)
 	target_compile_options(geogram PUBLIC -fopenmp)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
