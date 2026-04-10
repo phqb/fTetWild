@@ -62,12 +62,30 @@ if(NOT TARGET spdlog::spdlog)
     FetchContent_MakeAvailable(spdlog)
 endif()
 
+# Eigen3 — pre-declare using a tarball before libigl can trigger a slow GitLab
+# git clone. FetchContent records eigen as already populated, so libigl's own
+# eigen recipe hits the `if(NOT eigen_POPULATED)` guard and returns early.
+if(NOT TARGET Eigen3::Eigen)
+    FetchContent_Declare(
+        eigen
+        URL      https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+        URL_HASH SHA256=8586084f71f9bde545ee7fa6d00288b264a2b7ac3607b974e54d13e7162c1c72
+    )
+    FetchContent_GetProperties(eigen)
+    if(NOT eigen_POPULATED)
+        FetchContent_Populate(eigen)
+    endif()
+    add_library(Eigen3_Eigen INTERFACE)
+    add_library(Eigen3::Eigen ALIAS Eigen3_Eigen)
+    target_include_directories(Eigen3_Eigen SYSTEM INTERFACE ${eigen_SOURCE_DIR})
+endif()
+
 # libigl
 if(NOT TARGET igl::core)
     FetchContent_Declare(
         libigl
-        GIT_REPOSITORY https://github.com/libigl/libigl.git
-        GIT_TAG        v2.6.0   
+        URL      https://github.com/libigl/libigl/archive/refs/tags/v2.6.0.tar.gz
+        URL_HASH SHA256=fe3bf58571cccbef774947261284ccf6b7fdf04fcab5f7181e31931e42a0b14f
     )
     set(LIBIGL_BUILD_STATIC ON CACHE BOOL "" FORCE)
     set(LIBIGL_BUILD_SHARED OFF CACHE BOOL "" FORCE)
@@ -83,6 +101,13 @@ if(NOT TARGET geogram::geogram)
         geogram
         GIT_REPOSITORY https://github.com/BrunoLevy/geogram
         GIT_TAG        v1.9.6
+        # Only clone the submodules needed for the core library.
+        # Skips glfw and imgui (graphics, disabled via GEOGRAM_WITH_GRAPHICS OFF).
+        # GIT_SUBMODULES_RECURSE OFF prevents pybind11 inside amgcl from being cloned.
+        GIT_SUBMODULES "src/lib/geogram/third_party/amgcl"
+                       "src/lib/geogram/third_party/libMeshb"
+                       "src/lib/geogram/third_party/rply"
+        GIT_SUBMODULES_RECURSE OFF
     )
 
     # --- Final Recommended Configuration ---
