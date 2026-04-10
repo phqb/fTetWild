@@ -49,8 +49,7 @@ TetMesh run(const std::vector<std::array<double, 3>>& in_vertices,
             const std::vector<std::array<int, 3>>&    in_triangles,
             double       lr,
             unsigned int max_threads,
-            bool         skip_simplify,
-            int          log_level)
+            bool         skip_simplify)
 {
     // Initialize geogram and logger exactly once across all calls
     std::call_once(geo_init_flag, []() {
@@ -74,7 +73,6 @@ TetMesh run(const std::vector<std::array<double, 3>>& in_vertices,
     Parameters& params = mesh.params;
 
     params.ideal_edge_length_rel = lr;
-    params.log_level             = std::max(0, std::min(6, log_level));
 
 #ifdef FLOAT_TETWILD_USE_TBB
     const unsigned int hw_threads  = std::max(1u, std::thread::hardware_concurrency());
@@ -92,8 +90,6 @@ TetMesh run(const std::vector<std::array<double, 3>>& in_vertices,
     // https://github.com/libigl/libigl/issues/2412
     igl::default_num_threads(std::ceil(std::sqrt(num_threads)));
 #endif
-
-    spdlog::set_level(static_cast<spdlog::level::level_enum>(params.log_level));
 
     // Convert input to internal representation
     std::vector<Vector3>  input_vertices(in_vertices.size());

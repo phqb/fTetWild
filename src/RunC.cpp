@@ -9,6 +9,8 @@
 #include "RunC.h"
 #include "Run.h"
 
+#include <spdlog/spdlog.h>
+
 #include <array>
 #include <vector>
 
@@ -21,7 +23,7 @@ extern "C" {
 FTW_TetMesh* ftw_run(const double* in_vertices,  int num_vertices,
                      const int*    in_triangles, int num_triangles,
                      double lr, unsigned int max_threads,
-                     int skip_simplify, int log_level)
+                     int skip_simplify)
 {
     std::vector<std::array<double, 3>> verts(num_vertices);
     for (int i = 0; i < num_vertices; ++i)
@@ -33,7 +35,7 @@ FTW_TetMesh* ftw_run(const double* in_vertices,  int num_vertices,
 
     auto* result = new FTW_TetMesh;
     result->mesh = floatTetWild::run(verts, tris, lr, max_threads,
-                                     skip_simplify != 0, log_level);
+                                     skip_simplify != 0);
     return result;
 }
 
@@ -71,6 +73,11 @@ void ftw_tet_mesh_get_tetrahedra(const FTW_TetMesh* mesh, int* out)
 void ftw_tet_mesh_free(FTW_TetMesh* mesh)
 {
     delete mesh;
+}
+
+void ftw_set_log_level(int level)
+{
+    spdlog::set_level(static_cast<spdlog::level::level_enum>(level));
 }
 
 } // extern "C"

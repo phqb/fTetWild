@@ -34,7 +34,6 @@ struct TetMesh {
 //   lr            - ideal edge length as a fraction of the bounding box diagonal (--lr)
 //   max_threads   - maximum number of TBB threads; 0 = hardware concurrency (--max-threads)
 //   skip_simplify - skip input mesh preprocessing/simplification (--skip-simplify)
-//   log_level     - verbosity: 0 = most verbose, 6 = off (--level)
 //
 // Output:
 //   TetMesh with vertices and tetrahedra (0-based indices, vertex order
@@ -43,7 +42,6 @@ TetMesh run(const std::vector<std::array<double, 3>>& in_vertices,
             const std::vector<std::array<int, 3>>&    in_triangles,
             double       lr            = 0.05,
             unsigned int max_threads   = 0,
-            bool         skip_simplify = false,
-            int          log_level     = 3);
+            bool         skip_simplify = false);
 
 } // namespace floatTetWild

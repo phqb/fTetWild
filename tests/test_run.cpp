@@ -339,8 +339,7 @@ TEST_CASE("run produces .mesh output for test.obj", "[run]")
     floatTetWild::TetMesh result = floatTetWild::run(vertices, triangles,
                                                      /*lr=*/0.5,
                                                      /*max_threads=*/1,
-                                                     /*skip_simplify=*/true,
-                                                     /*log_level=*/0);
+                                                     /*skip_simplify=*/true);
 
     REQUIRE_FALSE(result.vertices.empty());
     REQUIRE_FALSE(result.tetrahedra.empty());
