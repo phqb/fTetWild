@@ -119,7 +119,7 @@ void floatTetWild::init(Mesh &mesh, AABBWrapper& tree) {
 //    fout.close();
 
     if (mesh.params.log_level<3) {
-        output_surface(mesh, mesh.params.output_path + "_" + mesh.params.postfix + "_cutting");
+        // output_surface(mesh, mesh.params.output_path + "_" + mesh.params.postfix + "_cutting");
         output_info(mesh, tree);
         //pausee();
         int v_num, t_num;
@@ -786,7 +786,7 @@ void floatTetWild::output_info(Mesh& mesh, const AABBWrapper& tree) {
 //    }
 
     if(mesh.params.log_level > 1) {
-        output_surface(mesh, mesh.params.output_path+"_"+mesh.params.postfix+"_opt");
+        // output_surface(mesh, mesh.params.output_path+"_"+mesh.params.postfix+"_opt");
         return;
     }
 
@@ -1039,19 +1039,19 @@ void floatTetWild::output_info(Mesh& mesh, const AABBWrapper& tree) {
 //    check_envelope(mesh, tree);
 
 //    MeshIO::write_mesh(mesh.params.output_path+"_"+mesh.params.postfix+"test.msh", mesh);
-    output_surface(mesh, mesh.params.output_path+"_"+mesh.params.postfix+"_opt");
+//     output_surface(mesh, mesh.params.output_path+"_"+mesh.params.postfix+"_opt");
 
-    std::ofstream fout(mesh.params.output_path+"_"+mesh.params.postfix+"_b_vs.xyz");
-    for(auto& v: mesh.tet_vertices){
-        if(v.is_removed || !v.is_on_boundary)
-            continue;
-//        GEO::index_t prev_facet;
-//        if (tree.is_out_tmp_b_envelope(v.pos, mesh.params.eps_2, prev_facet))
-//            cout<<"bad b_v"<<endl;
-        fout<<v.pos[0]<<" "<<v.pos[1]<<" "<<v.pos[2]<<endl;
-    }
-    fout.close();
-//    //pausee();
+//     std::ofstream fout(mesh.params.output_path+"_"+mesh.params.postfix+"_b_vs.xyz");
+//     for(auto& v: mesh.tet_vertices){
+//         if(v.is_removed || !v.is_on_boundary)
+//             continue;
+// //        GEO::index_t prev_facet;
+// //        if (tree.is_out_tmp_b_envelope(v.pos, mesh.params.eps_2, prev_facet))
+// //            cout<<"bad b_v"<<endl;
+//         fout<<v.pos[0]<<" "<<v.pos[1]<<" "<<v.pos[2]<<endl;
+//     }
+//     fout.close();
+// //    //pausee();
 
     return;
 }
@@ -1379,7 +1379,7 @@ void floatTetWild::get_tracked_surface(Mesh& mesh, Eigen::Matrix<Scalar, Eigen::
         F_sf.resize(0, 3);
         bfs_orient(F, F_sf, _1);
     }
-    igl::writeSTL(mesh.params.output_path + "_" + mesh.params.postfix + "_tracked_surface.stl", V_sf, F_sf);
+    // igl::writeSTL(mesh.params.output_path + "_" + mesh.params.postfix + "_tracked_surface.stl", V_sf, F_sf);
 }
 
 void floatTetWild::correct_tracked_surface_orientation(Mesh &mesh, AABBWrapper& tree){
